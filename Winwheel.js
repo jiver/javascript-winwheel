@@ -135,7 +135,7 @@ function Winwheel(options, drawWheel)
     }
     else
     {
-        this.cavnas = null;
+        this.canvas = null;
         this.ctx = null;
     }
 
