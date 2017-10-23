@@ -28,6 +28,9 @@
     <head>
         <title>HTML5 Canvas Winning Wheel</title>
         <link rel="stylesheet" href="main.css" type="text/css" />
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
         <script type="text/javascript" src="../../Winwheel.js"></script>
         <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
     </head>
@@ -89,9 +92,10 @@
                 'drawMode'          : 'segmentImage',    // Must be segmentImage to draw wheel using one image per segemnt.
                 'segments'          :                    // Define segments including image and text.
                 [
-                   {'image' : 'jane.png',  'text' : 'Jane'},
-                   {'image' : 'tom.png',   'text' : 'Tom'},
-                   {'image' : 'mary.png',  'text' : 'Mary'},
+                   {'image' : 'a.png',  'text' : 'Gryffindor'},
+                   {'image' : 'b.png',   'text' : 'Hufflepuff'},
+                   {'image' : 'c.png',  'text' : 'Ravenclaw'},
+                   {'image' : 'd.png',  'text' : 'Slytherin'}
                 ],
                 'animation' :           // Specify the animation to use.
                 {
