@@ -17,13 +17,30 @@ body
 }
 
 
+canvas.sorting_hat
+{
+    background-image: url(./sorting_hat.png);
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 450px 300px;
+   
+}
+
+canvas.title_img
+{
+    background-image: url(./sorting.png);
+    background-position: center;
+    background-repeat: no-repeat;
+   
+}
+
 /* Sets the background image for the wheel */
 td.the_wheel
 {
     background-image: url(./wheel_back.png);
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 2200px 2900px;
+    background-size: 1100px 1450px;
 }
 
 /* Do some css reset on selected elements */

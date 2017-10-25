@@ -37,10 +37,16 @@
             <table cellpadding="0" cellspacing="0" border="0">
             <tr>
                 <td width="90%" height="90%" class="the_wheel" align="center" valign="center">
-                    <canvas style="z-index: 1;" id="canvas" width="2900" height="2900">
+                    <canvas style="z-index: 1;" id="canvas" width="1500" height="1500">
                         <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
                     </canvas>
-                    <canvas style="position: absolute; left: 0; top: 0; z-index: 0;" id="canvas2" width="2900" height="2900">
+                    <canvas style="position: absolute; left: 0; top: 0; z-index: 0;" id="canvas2" width="1500" height="1500">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                    <canvas class="title_img" style="position: absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" width="1500" height="1500"  id="canvas123">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                    <canvas class="sorting_hat" style="position: absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" width="1500" height="1500"  id="canvas123">
                         <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
                     </canvas>
                 </td>
@@ -210,7 +216,7 @@
                     particles.push({
                         x: Math.random()*W, //x-coordinate
                         y: Math.random()*H, //y-coordinate
-                        r: Math.random()*20+1, //radius
+                        r: Math.random()*15+1, //radius
                         d: Math.random()*mp //density
                     })
                 }
