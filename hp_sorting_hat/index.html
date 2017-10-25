@@ -1,0 +1,292 @@
+<!--
+    Winhweel.js basic code wheel example by Douglas McKechie @ www.dougtesting.net
+    See website for tutorials and other documentation.
+
+    The MIT License (MIT)
+
+    Copyright (c) 2016 Douglas McKechie
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<html>
+    <head>
+        <title>HTML5 Canvas Winning Wheel</title>
+        <link rel="stylesheet" href="main.css" type="text/css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript" src="../Winwheel.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/latest/TweenMax.min.js"></script>
+    </head>
+    <body>
+        <div align="center">
+            <table cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td width="90%" height="90%" class="the_wheel" align="center" valign="center">
+                    <canvas style="z-index: 1;" id="canvas" width="1500" height="1500">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                    <canvas style="position: absolute; left: 0; top: 0; z-index: 0;" id="canvas2" width="1500" height="1500">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                    <canvas class="title_img" style="position: absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" width="1500" height="1500"  id="canvas123">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                    <canvas class="sorting_hat" style="position: absolute; margin-left: auto; margin-right: auto; left: 0; right: 0;" width="1500" height="1500"  id="canvas123">
+                        <p style="{color: white}" align="center">Sorry, your browser doesn't support canvas. Please try another.</p>
+                    </canvas>
+                </td>
+            </tr>
+        </table>
+        <script>
+            // Create new wheel object specifying the parameters at creation time.
+            var theWheel = new Winwheel({
+                'numSegments'       : 4,         // Specify number of segments.
+                'outerRadius'       : 500,       // Set outer radius so wheel fits inside the background.
+                'drawMode'          : 'image',   // drawMode must be set to image.
+                'drawText'          : true,      // Need to set this true if want code-drawn text on image wheels.
+                'textFontSize'      : 12,        // Set text options as desired.
+                'textOrientation'   : 'curved',
+                'textDirection'     : 'reversed',
+                'textAlignment'     : 'outer',
+                'textMargin'        : 5,
+                'textFontFamily'    : 'monospace',
+                'textStrokeStyle'   : 'black',
+                'textLineWidth'     : 2,
+                'textFillStyle'     : 'white',
+                'segments'     :                // Define segments.
+                [
+                   {'text' : 'Ravenclaw'},
+                   {'text' : 'Slytherin'},
+                   {'text' : 'Hufflepuff'},
+                   {'text' : 'Gryffindor'}
+                   
+                ],
+                'animation' :                   // Specify the animation to use.
+                {
+                    'type'     : 'spinToStop',
+                    'duration' : 2.5,     // Duration in seconds.
+                    'spins'    : 8,     // Number of complete spins.
+                    'callbackFinished' : 'alertPrize()'
+                }
+            });
+
+            // Create new image object in memory.
+            var loadedImg = new Image();
+
+            // Create callback to execute once the image has finished loading.
+            loadedImg.onload = function()
+            {
+                theWheel.wheelImage = loadedImg;    // Make wheelImage equal the loaded image object.
+                theWheel.draw();                    // Also call draw function to render the wheel.
+                powerSelected(3);
+            }
+
+            // Set the image source, once complete this will trigger the onLoad callback (above).
+            loadedImg.src = "wheel.png";
+
+
+
+            // Vars used by the code in this page to do power controls.
+            var wheelPower    = 0;
+            var wheelSpinning = false;
+
+            // -------------------------------------------------------
+            // Function to handle the onClick on the power buttons.
+            // -------------------------------------------------------
+            function powerSelected(powerLevel)
+            {
+                // Ensure that power can't be changed while wheel is spinning.
+                if (wheelSpinning == false)
+                {
+                    wheelPower = 3;
+                }
+            }
+
+            // -------------------------------------------------------
+            // Click handler for spin button.
+            // -------------------------------------------------------
+            function startSpin()
+            {
+                // Ensure that spinning can't be clicked again while already running.
+                if (wheelSpinning == false)
+                {
+                    // Based on the power level selected adjust the number of spins for the wheel, the more times is has
+                    // to rotate with the duration of the animation the quicker the wheel spins.
+                    if (wheelPower == 1)
+                    {
+                        theWheel.animation.spins = 2;
+                    }
+                    else if (wheelPower == 2)
+                    {
+                        theWheel.animation.spins = 5;
+                    }
+                    else if (wheelPower == 3)
+                    {
+                        theWheel.animation.spins = 4 + Math.floor(Math.random() * 4) + 1  ;
+                    }
+
+                    // Begin the spin animation by calling startAnimation on the wheel object.
+                    theWheel.startAnimation();
+
+                    // Set to true so that power can't be changed and spin button re-enabled during
+                    // the current animation. The user will have to reset before spinning again.
+                    wheelSpinning = true;
+                }
+            }
+
+            // -------------------------------------------------------
+            // Function for reset button.
+            // -------------------------------------------------------
+            function resetWheel()
+            {
+                theWheel.stopAnimation(false);  // Stop the animation, false as param so does not call callback function.
+                theWheel.rotationAngle = 0;     // Re-set the wheel angle to 0 degrees.
+                theWheel.draw();  
+                powerSelected(3);              // Call draw to render changes to the wheel.
+
+                wheelSpinning = false;          // Reset to false to power buttons and spin can be clicked again.
+            }
+
+            // -------------------------------------------------------
+            // Called when the spin animation has finished by the callback feature of the wheel because I specified callback in the parameters.
+            // -------------------------------------------------------
+            function alertPrize()
+            {
+                // Get the segment indicated by the pointer on the wheel background which is at 0 degrees.
+                var winningSegment = theWheel.getIndicatedSegment();
+
+                // Do basic alert of the segment text. You would probably want to do something more interesting with this information.
+                if(winningSegment.text == 'Ravenclaw'){
+                    new Audio("raevnclaw.mp3").play();
+                } else if (winningSegment.text == 'Slytherin') {
+                    new Audio("slytherin.mp3").play();
+                } else if (winningSegment.text == 'Hufflepuff') {
+                    new Audio("hufflepuff.mp3").play();
+                } else if (winningSegment.text == 'Gryffindor') {
+                    new Audio("gryffyndor.mp3").play();
+                }
+
+               // alert("Hmmm... " + winningSegment.text + "!");
+
+                
+            }
+
+
+            document.onkeydown = function(e) {
+                switch (e.keyCode) {
+                    case 32:
+                        resetWheel();
+                        powerSelected(3);
+                        startSpin();
+                        break;
+                }
+            };
+
+            window.onload = function(){
+                //canvas init
+                var canvas = document.getElementById("canvas2");
+                var ctx = canvas.getContext("2d");
+                
+                //canvas dimensions
+                var W = window.innerWidth;
+                var H = window.innerHeight;
+                canvas.width = W;
+                canvas.height = H;
+                
+                //snowflake particles
+                var mp = 25; //max particles
+                var particles = [];
+                for(var i = 0; i < mp; i++)
+                {
+                    particles.push({
+                        x: Math.random()*W, //x-coordinate
+                        y: Math.random()*H, //y-coordinate
+                        r: Math.random()*15+1, //radius
+                        d: Math.random()*mp //density
+                    })
+                }
+                
+                //Lets draw the flakes
+                function draw()
+                {
+                    ctx.clearRect(0, 0, W, H);
+                    
+                    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                    ctx.beginPath();
+                    for(var i = 0; i < mp; i++)
+                    {
+                        var p = particles[i];
+                        ctx.moveTo(p.x, p.y);
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+                    }
+                    ctx.fill();
+                    update();
+                }
+                
+                //Function to move the snowflakes
+                //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
+                var angle = 0;
+                function update()
+                {
+                    angle += 0.01;
+                    for(var i = 0; i < mp; i++)
+                    {
+                        var p = particles[i];
+                        //Updating X and Y coordinates
+                        //We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
+                        //Every particle has its own density which can be used to make the downward movement different for each flake
+                        //Lets make it more random by adding in the radius
+                        p.y += Math.cos(angle+p.d) + 1 + p.r/2;
+                        p.x += Math.sin(angle) * 2;
+                        
+                        //Sending flakes back from the top when it exits
+                        //Lets make it a bit more organic and let flakes enter from the left and right also.
+                        if(p.x > W+5 || p.x < -5 || p.y > H)
+                        {
+                            if(i%3 > 0) //66.67% of the flakes
+                            {
+                                particles[i] = {x: Math.random()*W, y: -10, r: p.r, d: p.d};
+                            }
+                            else
+                            {
+                                //If the flake is exitting from the right
+                                if(Math.sin(angle) > 0)
+                                {
+                                    //Enter from the left
+                                    particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
+                                }
+                                else
+                                {
+                                    //Enter from the right
+                                    particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                //animation loop
+                setInterval(draw, 33);
+            }
+
+
+
+            
+        </script>
+    </body>
+</html>
